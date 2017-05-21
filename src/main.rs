@@ -155,7 +155,7 @@ fn save_config(config: &Config) -> () {
 fn get_config() -> Config {
 
     let mut config_file: std::fs::File = match File::open(&std::path::Path::new("config.toml")) {
-        Ok(config_file) => { println!("ファイルを開けました"); config_file }
+        Ok(config_file) => { println!("Opened File"); config_file }
         Err(e) => File::create(&std::path::Path::new("config.toml")).unwrap()
     };
     let mut config_text = String::new();
