@@ -2,7 +2,7 @@
 name = "oranbot"
 version = "0.1.0"
 dependencies = [
- "mammut 0.6.1",
+ "mammut 0.6.1 (git+https://github.com/nacika-ins/Mammut.git?branch=develop)",
  "regex 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -228,6 +228,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "mammut"
 version = "0.6.1"
+source = "git+https://github.com/nacika-ins/Mammut.git?branch=develop#a39bd980a6bf9d55e0fd93a33ba1ae32a7f8abe0"
 dependencies = [
  "chrono 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "reqwest 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -797,6 +798,7 @@ dependencies = [
 "checksum libc 0.2.22 (registry+https://github.com/rust-lang/crates.io-index)" = "babb8281da88cba992fa1f4ddec7d63ed96280a1a53ec9b919fd37b53d71e502"
 "checksum libflate 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "a7aa60ce680c15f96b74bd6208256f112049ab20fd6da510f27f82cb78323a77"
 "checksum log 0.3.7 (registry+https://github.com/rust-lang/crates.io-index)" = "5141eca02775a762cc6cd564d8d2c50f67c0ea3a372cbf1c51592b3e029e10ad"
+"checksum mammut 0.6.1 (git+https://github.com/nacika-ins/Mammut.git?branch=develop)" = "<none>"
 "checksum matches 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)" = "efd7622e3022e1a6eaa602c4cea8912254e5582c9c692e9167714182244801b1"
 "checksum memchr 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)" = "1dbccc0e46f1ea47b9f17e6d67c5a96bd27030519c519c9c91327e31275a47b4"
 "checksum mime 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "5514f038123342d01ee5f95129e4ef1e0470c93bc29edf058a46f9ee3ba6737e"
