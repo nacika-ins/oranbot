@@ -140,10 +140,10 @@ fn save_config(config: &Config) -> () {
     let mut config_file: std::fs::File = File::create(&std::path::Path::new("config.toml")).unwrap();
     match config_file.write_all(t.as_bytes()) {
         Ok(_) => {
-            println!("保存成功")
+            println!("success")
         }
         Err(e) => {
-            println!("保存失敗 {:?}", e)
+            println!("fail", e)
         }
     };
     drop(config_file);
