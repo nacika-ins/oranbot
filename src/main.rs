@@ -109,7 +109,7 @@ fn try() -> mammut::Result<()> {
             let access_token = config.app.as_ref().unwrap().access_token.clone().unwrap();
             let mastodon: Mastodon = registration.set_access_token(access_token)?;
 
-            println!("--> ready");
+            println!("---> ready");
             bot::exec(&mastodon);
 
 
