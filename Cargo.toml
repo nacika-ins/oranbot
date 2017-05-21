@@ -4,4 +4,8 @@ version = "0.1.0"
 authors = ["nacika <nacika.inscatolare@gmail.com>"]
 
 [dependencies]
-mammut = { git = "https://github.com/Aaronepower/Mammut.git", version = "0.5.2" }
+mammut = { git = "https://github.com/nacika-ins/Mammut.git", version = "0.6.1", branch = "develop" }
+toml = "0.4.1"
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
