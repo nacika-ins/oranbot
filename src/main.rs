@@ -8,6 +8,8 @@ extern crate toml;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
+extern crate regex;
+extern crate url;
 
 mod bot;
 
@@ -28,10 +30,10 @@ struct AppConfig {
 }
 
 enum MODE{
-    NONE,
-    REGISTER,
-    GET_AUTHORIZE_CODE,
-    READY
+    None,
+    Register,
+    GetAuthorizeCode,
+    Ready
 }
 
 fn main() {
@@ -40,10 +42,11 @@ fn main() {
 
 fn try() -> mammut::Result<()> {
 
-    let mut app = get_app();
+    let app = get_app();
     let mut config = get_config();
     let mut registration = Registration::new("https://oransns.com")?;
-    let mut mode = MODE::NONE;
+    #[allow(unused_assignments)]
+    let mut mode = MODE::None;
 
     // Check if config is set, if not configure
     match config.app {
@@ -58,25 +61,25 @@ fn try() -> mammut::Result<()> {
             let url = registration.authorise()?;
             println!("---> please access to url: '{}'", url);
             println!("After accessing the URL, put the displayed authorize_code in config.toml");
-            mode = MODE::REGISTER;
+            mode = MODE::Register;
         }
         Some(ref mut app_config) if app_config.access_token.is_some() => {
-            println!("---> foundaccess_token");
-            mode = MODE::READY;
+            println!("---> found access_token");
+            mode = MODE::Ready;
         }
         _ => {
             println!("--> found cliend_id");
-            mode = MODE::GET_AUTHORIZE_CODE;
+            mode = MODE::GetAuthorizeCode;
         }
     }
 
     match mode {
 
         // When the mode is changed to REGISTER, save processing is performed
-        MODE::REGISTER => {
+        MODE::Register => {
             save_config(&config);
         }
-        MODE::GET_AUTHORIZE_CODE => {
+        MODE::GetAuthorizeCode => {
             registration.client_id = config.app.as_ref().unwrap().client_id.clone();
             registration.client_secret = config.app.as_ref().unwrap().client_secret.clone();
             registration.redirect = config.app.as_ref().unwrap().redirect.clone();
@@ -101,7 +104,7 @@ fn try() -> mammut::Result<()> {
             }
             save_config(&config);
         }
-        MODE::READY => {
+        MODE::Ready => {
 
             registration.client_id = config.app.as_ref().unwrap().client_id.clone();
             registration.client_secret = config.app.as_ref().unwrap().client_secret.clone();
@@ -156,6 +159,7 @@ fn get_config() -> Config {
         Err(e) => File::create(&std::path::Path::new("config.toml")).unwrap()
     };
     let mut config_text = String::new();
+    #[allow(unused_must_use)]
     config_file.read_to_string(&mut config_text);
     let mut config: Config = toml::from_str(&config_text).unwrap();
     if config.app.is_none() {
