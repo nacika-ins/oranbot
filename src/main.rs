@@ -115,8 +115,6 @@ fn try() -> mammut::Result<()> {
             println!("---> ready");
             bot::exec(&mastodon);
 
-
-
         }
         _ => {}
     }
