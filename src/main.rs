@@ -143,7 +143,7 @@ fn save_config(config: &Config) -> () {
             println!("success")
         }
         Err(e) => {
-            println!("fail", e)
+            println!("fail: {}", e)
         }
     };
     drop(config_file);
