@@ -11,6 +11,9 @@ use std::sync::mpsc::Receiver;
 use std::ops::Shr;
 use url::Url;
 
+extern crate curl;
+use std::io::{stdout, Write};
+use self::curl::easy::Easy;
 
 enum BotCommand {
     Reply
@@ -20,7 +23,8 @@ struct BotAction {
     command: BotCommand,
     message: Option<String>,
     from_status: Status,
-    from_account: Account
+    from_account: Account,
+    get_url: Option<String>
 
 }
 
@@ -68,9 +72,36 @@ pub fn exec(mastodon: &Mastodon) -> () {
                                     command: BotCommand::Reply,
                                     message: Some("うどん".to_owned()),
                                     from_status: notification.status.clone().unwrap(),
-                                    from_account: notification.account.clone()
+                                    from_account: notification.account.clone(),
+                                    get_url: None
                                 });
+                            } else {
+                              match true {
+                                _ if notification.status.as_ref().unwrap().content.contains("電気けして") || notification.status.as_ref().unwrap().content.contains("電気消して") => {
+                                    tx_1.send(BotAction {
+                                        command: BotCommand::Reply,
+                                        message: Some("あいよ".to_owned()),
+                                        from_status: notification.status.clone().unwrap(),
+                                        from_account: notification.account.clone(),
+                                        get_url: Some("http://localhost:1880/command/light-off".to_owned())
+                                    });
+
+                                },
+                                _ if notification.status.as_ref().unwrap().content.contains("電気つけて") || notification.status.as_ref().unwrap().content.contains("電気点けて") => {
+                                    tx_1.send(BotAction {
+                                        command: BotCommand::Reply,
+                                        message: Some("あいよ".to_owned()),
+                                        from_status: notification.status.clone().unwrap(),
+                                        from_account: notification.account.clone(),
+                                        get_url: Some("http://localhost:1880/command/light-on".to_owned())
+                                    });
+
+                                }
+                                _ => {}
+                              }
                             }
+
+
                         }
                         _ => {}
                     }
@@ -94,14 +125,22 @@ pub fn exec(mastodon: &Mastodon) -> () {
                 let domain = Url::parse(&uri).unwrap();
                 let domain = domain.host_str().unwrap();
                 let user_id = format!("@{}@{}", user_name, domain);
+                let message = action.message.unwrap_or("".to_owned());
+                let get_url = action.get_url;
 
                 match action.command {
                     BotCommand::Reply => {
-                        let mut status_b = StatusBuilder::new(format!("{} うどん", user_id));
+                        let mut status_b = StatusBuilder::new(format!("{} {}", user_id, message));
                         status_b.in_reply_to_id = Some(action.from_status.id as u64);
                         mastodon.new_status(status_b);
                     }
                 }
+
+                get_url.and_then( |url| {
+                    let mut easy = Easy::new();
+                    easy.url(&url).and_then( |_| easy.perform() );
+                    Some(true)
+                });
             }
             _ => {}
         }
